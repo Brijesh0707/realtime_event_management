@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import axios from "axios";
 import { useSocket } from "../../context/SocketContext";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Homescreen = () => {
   const socket = useSocket();
@@ -14,6 +15,8 @@ const Homescreen = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const authToken = localStorage.getItem("authToken"); 
+  const isGuest = localStorage.getItem("isGuest")
+  const navigate = useNavigate()
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -148,12 +151,16 @@ const Homescreen = () => {
                     <FaUserCheck className="text-green-600 mr-2" />
                     {event.attendees.length} attendees
                   </p>
-                  <button
+                  {isGuest==="true"?<button onClick={()=>{localStorage.removeItem("authToken");localStorage.removeItem("isGuest");navigate("/register")}}  className="mt-2 bg-gray-400 text-white py-2 rounded-md w-full">Please Create Account To Join</button>:
+                    <button
                     className="mt-2 bg-green-600 text-white px-4 py-2 rounded-md w-full"
                     onClick={() => handleJoinEvent(event._id)}
                   >
                     Join Event
                   </button>
+
+                  }
+                 
                 </div>
               ))
             ) : (

@@ -4,6 +4,7 @@ import { FaHome, FaChartBar, FaCog, FaSignOutAlt, FaUser } from "react-icons/fa"
 import Logo from "../../assets/react.svg"
 
 const Sidebar = ({ children }) => {
+  const isGuest = localStorage.getItem("isGuest")
   return (
     <div className="flex h-screen">
  
@@ -24,7 +25,7 @@ const Sidebar = ({ children }) => {
                 Home
               </Link>
             </li>
-            <li>
+            {isGuest!=="true"?<><li>
               <Link
                 to="/event/create"
                 className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-md"
@@ -41,20 +42,22 @@ const Sidebar = ({ children }) => {
                 <FaChartBar className="mr-2" />
                 Joined Events
               </Link>
-            </li>
+            </li></>:<p className="text-gray-400">Please Create Account to Access the Create Event and Joined Events Thanks</p>
+
+            }
+            
           </ul>
         </nav>
 
 
         <div className="p-4 border-t">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 justify-center">
             <FaUser className="text-gray-500" size={20} />
-            <div>
-              <p className="text-gray-800 font-medium">Brijesh 0707</p>
-            </div>
+            
           </div>
           <button onClick={()=>{
             localStorage.removeItem("authToken")
+            localStorage.removeItem("isGuest")
             window.location.reload()
           }} className="w-full flex items-center mt-4 text-red-500 hover:text-red-600">
             <FaSignOutAlt className="mr-2" />

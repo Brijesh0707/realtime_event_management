@@ -139,7 +139,7 @@ function App() {
           position="top-center"
           reverseOrder={false}
           toastOptions={{
-            duration: 10000,
+            duration: 5000,
           }}
         />
       </Suspense>

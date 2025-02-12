@@ -43,4 +43,45 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { register, login };
+const generateGuestToken = () => {
+  const guestId = 'guest_' + Math.random().toString(36).substr(2, 9);
+  const token = jwt.sign(
+    {
+      userId: guestId,
+      isGuest: true,
+      name: 'Guest User'
+    },
+    process.env.JWT_SECRET || 'Brijesh0707',
+    { expiresIn: '24h' }
+  );
+  
+  return { token, guestId };
+};
+
+
+const guestLogin = async (req, res) => {
+  try {
+    const { token, guestId } = generateGuestToken();
+    
+    res.status(200).json({
+      success: true,
+      token,
+      user: {
+        _id: guestId,
+        name: 'Guest User',
+        isGuest: true,
+        permissions: ['read_events']
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error creating guest session'
+    });
+  }
+};
+
+
+
+
+module.exports = { register, login,guestLogin };
